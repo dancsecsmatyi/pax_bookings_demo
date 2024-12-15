@@ -1,4 +1,3 @@
-// model/dto/CreateBookingDto.java
 package model.dto;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -19,7 +18,6 @@ public class CreateBookingDto {
     @Size(min = 1, message = "Itinerary must contain at least one destination")
     private List<String> itinerary;
 
-    // Constructors, getters, and setters
     public CreateBookingDto(String paxName, LocalDateTime departure, List<String> itinerary) {
         this.paxName = paxName;
         this.departure = departure;

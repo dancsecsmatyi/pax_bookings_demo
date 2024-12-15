@@ -1,4 +1,3 @@
-// ui/src/test/java/presenter/CreateBookingPresenterTest.java
 package presenter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,17 +36,14 @@ public class CreateBookingPresenterTest {
 
     @Test
     public void testPresent() throws JsonProcessingException {
-        // Arrange
         String jsonResponse = "{\"result\":\"SUCCESS\",\"id\":\"565110d1-ed7f-4808-bced-38c1157f6e61\",\"paxName\":\"Test\",\"departure\":\"2024-12-30T12:12\",\"itinerary\":[\"AMS\",\"LHR\"]}";
         CreateBookingResponse expectedResponse = new CreateBookingResponse(Result.SUCCESS, "565110d1-ed7f-4808-bced-38c1157f6e61", "Test", LocalDateTime.of(2024,12,30,12,12), List.of("AMS", "LHR"));
 
         when(objectMapper.readValue(jsonResponse, CreateBookingResponse.class))
                 .thenReturn(expectedResponse);
 
-        // Act
         presenter.present(jsonResponse);
 
-        // Assert
         verify(consoleResultView, times(1)).display(expectedResponse);
     }
 }

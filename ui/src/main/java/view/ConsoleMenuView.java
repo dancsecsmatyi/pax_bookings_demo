@@ -1,4 +1,3 @@
-// ConsoleMenuView.java
 package view;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -60,7 +59,7 @@ public class ConsoleMenuView {
         int hour = scanner.nextInt();
         System.out.print("Enter Departure Minute: ");
         int minute = scanner.nextInt();
-        scanner.nextLine(); // Consume newline left-over
+        scanner.nextLine();
         LocalDateTime departure = LocalDateTime.of(year, month, day, hour, minute);
 
         System.out.print("Enter Itinerary (comma separated): ");
@@ -84,7 +83,7 @@ public class ConsoleMenuView {
         int minute = scanner.nextInt();
         System.out.print("Enter Departure Second: ");
         int second = scanner.nextInt();
-        scanner.nextLine(); // Consume newline left-over
+        scanner.nextLine();
         LocalDateTime departure = LocalDateTime.of(year, month, day, hour, minute, second);
         bookingController.searchBookingsByDeparture(departure);
     }

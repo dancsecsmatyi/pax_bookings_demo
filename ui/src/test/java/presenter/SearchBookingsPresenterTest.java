@@ -1,4 +1,3 @@
-// src/test/java/presenter/SearchBookingsPresenterTest.java
 package presenter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
