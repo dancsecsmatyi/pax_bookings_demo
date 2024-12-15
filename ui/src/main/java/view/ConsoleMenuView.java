@@ -86,7 +86,7 @@ public class ConsoleMenuView {
         int second = scanner.nextInt();
         scanner.nextLine(); // Consume newline left-over
         LocalDateTime departure = LocalDateTime.of(year, month, day, hour, minute, second);
-        bookingController.searchBookings(departure);
+        bookingController.searchBookingsByDeparture(departure);
     }
 
     private void searchBookingsByAirports() throws JsonProcessingException {

@@ -1,4 +1,3 @@
-// src/test/java/repository/FileSearchBookingsRepositoryTest.java
 package repository;
 
 import entity.Booking;
@@ -19,7 +18,6 @@ public class FileSearchBookingsRepositoryTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        // Create a test file with sample data
         writeTestFile();
         repository = new FileSearchBookingsRepository(testFilePath);
     }
@@ -30,8 +28,8 @@ public class FileSearchBookingsRepositoryTest {
         List<Booking> bookings = repository.findByDepartureBefore(departureTime);
 
         assertEquals(2, bookings.size());
-        assertEquals("John Doe", bookings.get(0).paxName());
-        assertEquals("Jane Smith", bookings.get(1).paxName());
+        assertEquals("John Doe", bookings.get(0).getPaxName());
+        assertEquals("Jane Smith", bookings.get(1).getPaxName());
     }
 
     @Test
@@ -39,7 +37,7 @@ public class FileSearchBookingsRepositoryTest {
         List<Booking> bookings = repository.findByItineraryContainingAirports("AMS", "LHR");
 
         assertEquals(1, bookings.size());
-        assertEquals("Bob Brown", bookings.get(0).paxName());
+        assertEquals("Bob Brown", bookings.get(0).getPaxName());
     }
 
     @Test
@@ -47,7 +45,7 @@ public class FileSearchBookingsRepositoryTest {
         List<Booking> bookings = repository.findByItineraryContainingAirports("LHR", "AMS");
 
         assertEquals(1, bookings.size());
-        assertEquals("Charlie Davis", bookings.get(0).paxName());
+        assertEquals("Charlie Davis", bookings.get(0).getPaxName());
     }
 
     @Test
@@ -68,8 +66,8 @@ public class FileSearchBookingsRepositoryTest {
         List<Booking> bookings = repository.findByItineraryContainingAirports("AMS", "LHR");
 
         assertEquals(2, bookings.size());
-        assertEquals("Bob Brown", bookings.get(0).paxName());
-        assertEquals("Eve Adams", bookings.get(1).paxName());
+        assertEquals("Bob Brown", bookings.get(0).getPaxName());
+        assertEquals("Eve Adams", bookings.get(1).getPaxName());
     }
 
     private void writeTestFile() throws IOException {

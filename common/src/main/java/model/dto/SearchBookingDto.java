@@ -1,4 +1,3 @@
-// src/main/java/dto/BookingDto.java
 package model.dto;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,3 @@
-// repository/src/test/java/repository/FileCreateBookingRepositoryTest.java
 package repository;
 
 import entity.Booking;
@@ -33,35 +32,31 @@ public class FileCreateBookingRepositoryTest {
 
     @Test
     public void testSave() throws IOException {
-        // Arrange
+       
         Booking booking = new Booking(UUID.randomUUID().toString(), "John Doe", LocalDateTime.of(2023, 10, 10, 10, 0), List.of("NYC", "LAX"));
 
-        // Act
         repository.save(booking);
 
-        // Assert
         try (BufferedReader reader = new BufferedReader(new FileReader(testFilePath))) {
             String line = reader.readLine();
-            assertEquals(booking.uuid() + ",John Doe,2023-10-10T10:00,NYC;LAX", line);
+            assertEquals(booking.getUuid() + ",John Doe,2023-10-10T10:00,NYC;LAX", line);
         }
     }
 
     @Test
     public void testSaveMultipleBookings() throws IOException {
-        // Arrange
+       
         Booking booking1 = new Booking(UUID.randomUUID().toString(), "John Doe", LocalDateTime.of(2023, 10, 10, 10, 0), List.of("NYC", "LAX"));
         Booking booking2 = new Booking(UUID.randomUUID().toString(), "Jane Smith", LocalDateTime.of(2023, 10, 11, 11, 0), List.of("SFO", "SEA"));
 
-        // Act
         repository.save(booking1);
         repository.save(booking2);
 
-        // Assert
         try (BufferedReader reader = new BufferedReader(new FileReader(testFilePath))) {
             String line1 = reader.readLine();
             String line2 = reader.readLine();
-            assertEquals(booking1.uuid() + ",John Doe,2023-10-10T10:00,NYC;LAX", line1);
-            assertEquals(booking2.uuid() + ",Jane Smith,2023-10-11T11:00,SFO;SEA", line2);
+            assertEquals(booking1.getUuid() + ",John Doe,2023-10-10T10:00,NYC;LAX", line1);
+            assertEquals(booking2.getUuid() + ",Jane Smith,2023-10-11T11:00,SFO;SEA", line2);
         }
     }
 }

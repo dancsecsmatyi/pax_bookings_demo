@@ -20,7 +20,7 @@ public class BookingRequestResponseObjectMapper {
     public ObjectMapper getObjectMapperWithNecessaryModule() {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         final DateTimeFormatter dateTimeFormatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         javaTimeModule.addSerializer(new LocalDateTimeSerializer(dateTimeFormatter));
         javaTimeModule.addDeserializer(
                 LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));

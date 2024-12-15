@@ -1,6 +1,7 @@
 package org.example.config;
 
-import controller.BookingController;
+import console.controller.BookingController;
+import console.view.ConsoleResultView;
 import createbooking.boundary.CreateBookingInputBoundary;
 import createbooking.interactor.CreateBookingInteractor;
 import createbooking.repository.CreateBookingRepository;
@@ -8,19 +9,17 @@ import mapper.BookingRequestResponseObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import presenter.CreateBookingPresenter;
-import presenter.SearchBookingsPresenter;
+import console.presenter.CreateBookingPresenter;
+import console.presenter.SearchBookingsPresenter;
 import repository.FileCreateBookingRepository;
 import repository.FileSearchBookingsRepository;
 import search.boundary.SearchBookingsInputBoundary;
 import search.interactor.SearchBookingsInteractor;
 import search.repository.SearchBookingRepository;
-import view.ConsoleMenuView;
-import view.ConsoleResultView;
+import console.view.ConsoleMenuView;
 
-@Configuration
-public class BookingsConfig {
+//@Configuration
+public class BookingsConsoleConfig {
 
     @Value("${repository.file.path}")
     private String filePath;
@@ -60,8 +59,9 @@ public class BookingsConfig {
     }
 
     @Bean
-    public CreateBookingPresenter createBookingPresenter(ConsoleResultView consoleResultView) {
-        return new CreateBookingPresenter(consoleResultView);
+    public CreateBookingPresenter createBookingPresenter(BookingRequestResponseObjectMapper bookingRequestResponseObjectMapper,
+                                                         ConsoleResultView consoleResultView) {
+        return new CreateBookingPresenter(bookingRequestResponseObjectMapper, consoleResultView);
     }
 
     @Bean
@@ -84,11 +84,6 @@ public class BookingsConfig {
     @Bean
     public BookingRequestResponseObjectMapper bookingsObjectMapper() {
         return new BookingRequestResponseObjectMapper();
-    }
-
-    @Bean
-    public ConsoleResultView consoleResultView() {
-        return new ConsoleResultView();
     }
 
     @Bean

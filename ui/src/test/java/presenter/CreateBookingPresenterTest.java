@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mapper.BookingRequestResponseObjectMapper;
 import model.response.CreateBookingResponse;
+import model.response.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -37,8 +38,8 @@ public class CreateBookingPresenterTest {
     @Test
     public void testPresent() throws JsonProcessingException {
         // Arrange
-        String jsonResponse = "{\"id\":\"565110d1-ed7f-4808-bced-38c1157f6e61\",\"paxName\":\"Test\",\"departure\":\"2024-12-30T12:12:12\",\"itinerary\":[\"AMS\",\"LHR\"]}";
-        CreateBookingResponse expectedResponse = new CreateBookingResponse("565110d1-ed7f-4808-bced-38c1157f6e61", "Test", LocalDateTime.of(2024,12,30,12,12,12), List.of("AMS", "LHR"));
+        String jsonResponse = "{\"result\":\"SUCCESS\",\"id\":\"565110d1-ed7f-4808-bced-38c1157f6e61\",\"paxName\":\"Test\",\"departure\":\"2024-12-30T12:12\",\"itinerary\":[\"AMS\",\"LHR\"]}";
+        CreateBookingResponse expectedResponse = new CreateBookingResponse(Result.SUCCESS, "565110d1-ed7f-4808-bced-38c1157f6e61", "Test", LocalDateTime.of(2024,12,30,12,12), List.of("AMS", "LHR"));
 
         when(objectMapper.readValue(jsonResponse, CreateBookingResponse.class))
                 .thenReturn(expectedResponse);

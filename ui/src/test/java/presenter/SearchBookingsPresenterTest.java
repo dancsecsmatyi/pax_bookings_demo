@@ -4,6 +4,7 @@ package presenter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mapper.BookingRequestResponseObjectMapper;
+import model.response.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,6 +41,7 @@ public class SearchBookingsPresenterTest {
     public void testPresent() throws JsonProcessingException {
         SearchBookingsResponse response =
                 new SearchBookingsResponse(
+                        Result.SUCCESS,
                         Collections.singletonList(
                                 new SearchBookingDto(
                                         "John Doe",

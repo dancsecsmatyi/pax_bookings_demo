@@ -30,16 +30,16 @@ public class BookingController {
         CreateBookingRequest request =
                 new CreateBookingRequest(
                         createBookingDto.getPaxName(),
-                        createBookingDto.getDeparture(),
+                        createBookingDto.getDeparture().toString(),
                         createBookingDto.getItinerary());
         createBookingInputBoundary.createBooking(
                 objectMapper.getObjectMapperWithNecessaryModule().writeValueAsString(request));
     }
 
-    public void searchBookings(LocalDateTime departureTime) throws JsonProcessingException {
+    public void searchBookingsByDeparture(LocalDateTime departureTime) throws JsonProcessingException {
         SearchBookingsByDepartureRequest request =
-                new SearchBookingsByDepartureRequest(departureTime);
-        searchBookingsInputBoundary.searchBookings(
+                new SearchBookingsByDepartureRequest(departureTime.toString());
+        searchBookingsInputBoundary.searchBookingsByDeparture(
                 objectMapper.getObjectMapperWithNecessaryModule().writeValueAsString(request));
     }
 

@@ -1,0 +1,23 @@
+meta {
+  name: create_bookings_departure_empty
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/bookings/create
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "paxName": "Test",
+      "departure": "",
+      "itinerary": ["NYC"]
+  }
+}

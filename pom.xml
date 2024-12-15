@@ -30,6 +30,7 @@
         <spring-boot-starter.version>3.4.0</spring-boot-starter.version>
         <jackson-databind.version>2.17.2</jackson-databind.version>
         <spotless.version>2.43.0</spotless.version>
+        <lombok.version>1.18.36</lombok.version>
     </properties>
 
     <dependencies>
@@ -58,6 +59,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson-databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
 

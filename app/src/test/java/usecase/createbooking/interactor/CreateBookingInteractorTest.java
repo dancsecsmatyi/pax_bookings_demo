@@ -1,4 +1,3 @@
-// app/src/test/java/createbooking/interactor/CreateBookingInteractorTest.java
 package usecase.createbooking.interactor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +9,7 @@ import model.response.CreateBookingResponse;
 import createbooking.repository.CreateBookingRepository;
 import entity.Booking;
 import mapper.BookingRequestResponseObjectMapper;
+import model.response.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -44,26 +44,24 @@ class CreateBookingInteractorTest {
 
     @Test
     void createBooking() throws JsonProcessingException {
-        // Arrange
-        CreateBookingRequest request = new CreateBookingRequest("John Doe", LocalDateTime.now(), List.of("Location1", "Location2"));
-        String requestJson = "{\"paxName\":\"John Doe\",\"departure\":\"2023-10-10T10:00:00\",\"itinerary\":[\"Location1\",\"Location2\"]}";
+       
+        CreateBookingRequest request = new CreateBookingRequest("John Doe", "2023-10-10T10:00", List.of("Location1", "Location2"));
+        String requestJson = "{\"paxName\":\"John Doe\",\"departure\":\"2023-10-10T10:00\",\"itinerary\":[\"Location1\",\"Location2\"]}";
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(bookingRequestResponseObjectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapper);
         when(objectMapper.readValue(requestJson, CreateBookingRequest.class)).thenReturn(request);
 
-        // Act
         createBookingInteractor.createBooking(requestJson);
 
-        // Assert
         ArgumentCaptor<Booking> bookingCaptor = ArgumentCaptor.forClass(Booking.class);
         verify(createBookingRepository).save(bookingCaptor.capture());
         Booking savedBooking = bookingCaptor.getValue();
-        assertThat(savedBooking).extracting(Booking::paxName, Booking::departure, Booking::itinerary)
-                .containsExactly(request.paxName(), request.departure(), request.itinerary());
+        assertThat(savedBooking).extracting(Booking::getPaxName, Booking::getDeparture, Booking::getItinerary)
+                .containsExactly(request.getPaxName(), LocalDateTime.parse(request.getDeparture()), request.getItinerary());
 
         ArgumentCaptor<String> responseCaptor = ArgumentCaptor.forClass(String.class);
         verify(outputBoundary).present(responseCaptor.capture());
-        CreateBookingResponse response = new CreateBookingResponse(savedBooking.uuid(), savedBooking.paxName(), savedBooking.departure(), savedBooking.itinerary());
+        CreateBookingResponse response = new CreateBookingResponse(Result.SUCCESS, savedBooking.getUuid(), savedBooking.getPaxName(), savedBooking.getDeparture(), savedBooking.getItinerary());
         when(objectMapper.writeValueAsString(response)).thenReturn(responseCaptor.getValue());
         assertThat(responseCaptor.getValue()).isEqualTo(objectMapper.writeValueAsString(response));
     }

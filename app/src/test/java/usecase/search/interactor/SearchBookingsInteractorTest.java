@@ -1,10 +1,10 @@
-// app/src/test/java/search/interactor/SearchBookingsInteractorTest.java
 package usecase.search.interactor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Booking;
 import mapper.BookingRequestResponseObjectMapper;
+import model.response.SearchBookingsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +18,6 @@ import search.repository.SearchBookingRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -45,14 +44,15 @@ class SearchBookingsInteractorTest {
     }
 
     @Test
-    void testSearchBookings() throws JsonProcessingException {
-        // Arrange
-        String requestJson = "{\"departureTime\":\"2023-10-10T10:00:00\"}";
-        SearchBookingsByDepartureRequest request = new SearchBookingsByDepartureRequest(LocalDateTime.of(2023, 10, 10, 10, 0));
+    void testSearchBookingsByDeparture() throws JsonProcessingException {
+
+        String requestJson = "{\"departureTime\":\"2023-10-10T10:00\"}";
+        SearchBookingsByDepartureRequest request = new SearchBookingsByDepartureRequest(LocalDateTime.of
+                (2023, 10, 10, 10, 0).toString());
         ObjectMapper objectMapperWithNecessaryModule = mock(ObjectMapper.class);
         when(objectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapperWithNecessaryModule);
         when(objectMapperWithNecessaryModule.readValue(requestJson, SearchBookingsByDepartureRequest.class)).thenReturn(request);
-        when(objectMapperWithNecessaryModule.writeValueAsString(any(Map.class))).thenReturn("json");
+        when(objectMapperWithNecessaryModule.writeValueAsString(any(SearchBookingsResponse.class))).thenReturn("json");
         when(searchBookingRepository.findByDepartureBefore(any(LocalDateTime.class)))
                 .thenReturn(
                         List.of(
@@ -62,18 +62,17 @@ class SearchBookingsInteractorTest {
                                         LocalDateTime.now(),
                                         List.of("AirportFrom", "AirportTo"))));
 
-        // Act & Assert
-        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookings(requestJson));
+        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsByDeparture(requestJson));
         verify(outputBoundary, times(1)).present(any(String.class));
     }
 
     @Test
-    void testSearchBookingsVisitingTwoAirports() throws JsonProcessingException {
-        // Arrange
+    void testSearchBookingsByDepartureVisitingTwoAirports() throws JsonProcessingException {
+
         String requestJson = "{\"airportFirst\":\"AirportFrom\", \"airportSecond\":\"AirportTo\"}";
         SearchBookingsByAirportsRequest request = new SearchBookingsByAirportsRequest("AirportFrom", "AirportTo");
         ObjectMapper objectMapperWithNecessaryModule = getObjectMapperWithMockedMethods(requestJson, request);
-        when(objectMapperWithNecessaryModule.writeValueAsString(any(Map.class))).thenReturn("json");
+        when(objectMapperWithNecessaryModule.writeValueAsString(any(SearchBookingsResponse.class))).thenReturn("json");
         when(searchBookingRepository.findByItineraryContainingAirports(anyString(), anyString()))
                 .thenReturn(
                         List.of(
@@ -83,14 +82,13 @@ class SearchBookingsInteractorTest {
                                         LocalDateTime.now(),
                                         List.of("AirportFrom", "AirportTo"))));
 
-        // Act & Assert
         assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsVisitingTwoAirports(requestJson));
         verify(outputBoundary, times(1)).present(any(String.class));
     }
 
     @Test
-    void testSearchBookingsVisitingTwoAirportsReverseDirection() throws JsonProcessingException {
-        // Arrange
+    void testSearchBookingsByDepartureVisitingTwoAirportsReverseDirection() throws JsonProcessingException {
+
         String requestJson = "{\"airportFirst\":\"AirportFrom\", \"airportSecond\":\"AirportTo\"}";
         SearchBookingsByAirportsRequest request = new SearchBookingsByAirportsRequest("AirportFrom", "AirportTo");
         getObjectMapperWithMockedMethods(requestJson, request);
@@ -103,9 +101,58 @@ class SearchBookingsInteractorTest {
                                         LocalDateTime.now(),
                                         List.of("AirportTo", "AirportFrom"))));
 
-        // Act & Assert
         assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsVisitingTwoAirports(requestJson));
         verify(outputBoundary, times(0)).present(any(String.class));
+    }
+
+    @Test
+    void testSearchBookingsByDepartureWithInvalidJson() throws JsonProcessingException {
+        String invalidJson = "invalid json";
+        ObjectMapper objectMapperWithNecessaryModule = mock(ObjectMapper.class);
+        when(objectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapperWithNecessaryModule);
+        when(objectMapperWithNecessaryModule.readValue(invalidJson, SearchBookingsByDepartureRequest.class)).thenThrow(JsonProcessingException.class);
+
+        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsByDeparture(invalidJson));
+        verify(outputBoundary, times(0)).present(any(String.class));
+    }
+
+    @Test
+    void testSearchBookingsByDepartureWithEmptyResult() throws JsonProcessingException {
+        String requestJson = "{\"departureTime\":\"2023-10-10T10:00\"}";
+        SearchBookingsByDepartureRequest request = new SearchBookingsByDepartureRequest(LocalDateTime.of(2023, 10, 10, 10, 0).toString());
+        ObjectMapper objectMapperWithNecessaryModule = mock(ObjectMapper.class);
+        when(objectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapperWithNecessaryModule);
+        when(objectMapperWithNecessaryModule.readValue(requestJson, SearchBookingsByDepartureRequest.class)).thenReturn(request);
+        when(objectMapperWithNecessaryModule.writeValueAsString(any(SearchBookingsResponse.class))).thenReturn("json");
+        when(searchBookingRepository.findByDepartureBefore(any(LocalDateTime.class))).thenReturn(List.of());
+
+        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsByDeparture(requestJson));
+        verify(outputBoundary, times(1)).present(any(String.class));
+    }
+
+    @Test
+    void testSearchBookingsByAirportsWithInvalidJson() throws JsonProcessingException {
+        String invalidJson = "invalid json";
+        ObjectMapper objectMapperWithNecessaryModule = mock(ObjectMapper.class);
+        when(objectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapperWithNecessaryModule);
+        when(objectMapperWithNecessaryModule.readValue(invalidJson, SearchBookingsByDepartureRequest.class)).thenThrow(JsonProcessingException.class);
+
+        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsVisitingTwoAirports(invalidJson));
+        verify(outputBoundary, times(0)).present(any(String.class));
+    }
+
+    @Test
+    void testSearchBookingsByAirportsWithEmptyResult() throws JsonProcessingException {
+        String requestJson = "{\"airportFirst\":\"N/A\", \"airportSecond\":\"N/A\"}";
+        SearchBookingsByAirportsRequest request = new SearchBookingsByAirportsRequest("AirportFrom", "AirportTo");
+        ObjectMapper objectMapperWithNecessaryModule = mock(ObjectMapper.class);
+        when(objectMapper.getObjectMapperWithNecessaryModule()).thenReturn(objectMapperWithNecessaryModule);
+        when(objectMapperWithNecessaryModule.readValue(requestJson, SearchBookingsByAirportsRequest.class)).thenReturn(request);
+        when(objectMapperWithNecessaryModule.writeValueAsString(any(SearchBookingsResponse.class))).thenReturn("json");
+        when(searchBookingRepository.findByDepartureBefore(any(LocalDateTime.class))).thenReturn(List.of());
+
+        assertDoesNotThrow(() -> searchBookingsInteractor.searchBookingsVisitingTwoAirports(requestJson));
+        verify(outputBoundary, times(1)).present(any(String.class));
     }
 
     private ObjectMapper getObjectMapperWithMockedMethods(String requestJson, SearchBookingsByAirportsRequest request) throws JsonProcessingException {

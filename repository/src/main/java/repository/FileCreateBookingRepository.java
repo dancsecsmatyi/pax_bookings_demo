@@ -1,4 +1,3 @@
-// repository/src/main/java/repository/FileCreateBookingRepository.java
 package repository;
 
 import entity.Booking;
@@ -17,7 +16,7 @@ public class FileCreateBookingRepository implements CreateBookingRepository {
     @Override
     public void save(Booking booking) {
         try (FileWriter writer = new FileWriter(file, true);
-             BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
+                BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
             bufferedWriter.write(BookingMapper.bookingToString(booking));
             bufferedWriter.newLine();
         } catch (IOException e) {

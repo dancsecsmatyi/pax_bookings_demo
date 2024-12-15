@@ -1,0 +1,22 @@
+meta {
+  name: search_bookings_by_airports_null
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:8080/bookings/searchByAirports
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "airportFirst": null,
+      "airportSecond": null
+  }
+}

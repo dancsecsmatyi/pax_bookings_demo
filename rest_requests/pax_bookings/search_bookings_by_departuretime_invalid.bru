@@ -1,0 +1,21 @@
+meta {
+  name: search_bookings_by_departuretime_invalid
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/bookings/searchByDeparturetime
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "departureTime": ""
+  }
+}
