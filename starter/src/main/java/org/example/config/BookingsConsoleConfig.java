@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import console.presenter.CreateBookingPresenter;
 import console.presenter.SearchBookingsPresenter;
+import org.springframework.context.annotation.Configuration;
 import repository.FileCreateBookingRepository;
 import repository.FileSearchBookingsRepository;
 import search.boundary.SearchBookingsInputBoundary;
@@ -18,7 +19,6 @@ import search.interactor.SearchBookingsInteractor;
 import search.repository.SearchBookingRepository;
 import console.view.ConsoleMenuView;
 
-//@Configuration
 public class BookingsConsoleConfig {
 
     @Value("${repository.file.path}")
@@ -84,6 +84,11 @@ public class BookingsConsoleConfig {
     @Bean
     public BookingRequestResponseObjectMapper bookingsObjectMapper() {
         return new BookingRequestResponseObjectMapper();
+    }
+
+    @Bean
+    public ConsoleResultView consoleResultView() {
+        return new ConsoleResultView();
     }
 
     @Bean
